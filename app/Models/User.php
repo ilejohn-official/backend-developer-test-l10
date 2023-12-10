@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-use Database\Seeders\BadgeSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -76,24 +73,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Achievement::class, 'achievement_user');
     }
-
-    /**
-     * The user's current badge.
-     */
-    public function badge()
-    {
-        $numberOfAchievements = $this->achievements()->count();
-
-        $badgeUnlockCount = match (true) {
-            $numberOfAchievements >= 10 => 10,
-            $numberOfAchievements >= 8 => 8,
-            $numberOfAchievements >= 4 => 4,
-            $numberOfAchievements >= 0 => 0,
-            default => 0,
-        };
-
-        return Badge::firstWhere('unlock_count', $badgeUnlockCount);
-    }
-
 }
-
