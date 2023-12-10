@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Enums\AchievementType;
 use App\Events\AchievementUnlocked;
 use App\Events\CommentWritten;
 use App\Events\BadgeUnlocked;
@@ -27,7 +28,7 @@ class CommentWrittenListener
 
         $commentsCount = $user->comments()->count();
 
-        $achievement = Achievement::where('type', 'comments_written')->firstWhere('unlock_count', $commentsCount);
+        $achievement = Achievement::where('type', AchievementType::CommentsWritten)->firstWhere('unlock_count', $commentsCount);
 
         if(empty($achievement)) {
             return;

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Enums\AchievementType;
 use App\Events\AchievementUnlocked;
 use App\Events\LessonWatched;
 use App\Events\BadgeUnlocked;
@@ -27,7 +28,7 @@ class LessonWatchedListener
 
         $lessonsWatchedCount = $user->watched()->count();
 
-        $achievement = Achievement::where('type', 'lessons_watched')->firstWhere('unlock_count', $lessonsWatchedCount);
+        $achievement = Achievement::where('type', AchievementType::LessonsWatched)->firstWhere('unlock_count', $lessonsWatchedCount);
 
         if(empty($achievement)) {
             return;

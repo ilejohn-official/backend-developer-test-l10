@@ -12,7 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([AchievementSeeder::class, BadgeSeeder::class]);
+        $this->call([
+            AchievementSeeder::class, 
+            BadgeSeeder::class
+        ]);
 
         $lessons = Lesson::factory()
             ->count(20)
