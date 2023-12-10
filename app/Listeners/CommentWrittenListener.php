@@ -4,7 +4,9 @@ namespace App\Listeners;
 
 use App\Events\AchievementUnlocked;
 use App\Events\CommentWritten;
+use App\Events\BadgeUnlocked;
 use App\Models\Achievement;
+use App\Models\Badge;
 
 class CommentWrittenListener
 {
@@ -34,5 +36,13 @@ class CommentWrittenListener
         $user->achievements()->attach($achievement->id, ['unlocked_at' => now()]);
 
         AchievementUnlocked::dispatch($achievement->name, $user);
+
+        $badge = Badge::firstWhere('unlock_count', $user->achievements()->count());
+
+        if (empty($badge)){
+            return;
+        }
+
+        BadgeUnlocked::dispatch($badge->name, $user);
     }
 }
