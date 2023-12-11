@@ -3,18 +3,19 @@
 namespace App\Listeners;
 
 use App\Enums\AchievementType;
-use App\Events\AchievementUnlocked;
 use App\Events\CommentWritten;
-use App\Events\BadgeUnlocked;
-use App\Models\Achievement;
-use App\Models\Badge;
+use App\Services\AchievementService;
+use App\Services\BadgeService;
 
 class CommentWrittenListener
 {
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(
+        public BadgeService $badgeService,
+        public AchievementService $achievementService
+    )
     {
         //
     }
@@ -26,24 +27,8 @@ class CommentWrittenListener
     {
         $user = $event->comment->user;
 
-        $commentsCount = $user->comments()->count();
+        $this->achievementService->unlockAchievement($user, AchievementType::CommentsWritten);
 
-        $achievement = Achievement::where('type', AchievementType::CommentsWritten)->firstWhere('unlock_count', $commentsCount);
-
-        if(empty($achievement)) {
-            return;
-        }
-
-        $user->achievements()->attach($achievement->id, ['unlocked_at' => now()]);
-
-        AchievementUnlocked::dispatch($achievement->name, $user);
-
-        $badge = Badge::firstWhere('unlock_count', $user->achievements()->count());
-
-        if (empty($badge)){
-            return;
-        }
-
-        BadgeUnlocked::dispatch($badge->name, $user);
+        $this->badgeService->handleBadge($user);
     }
 }

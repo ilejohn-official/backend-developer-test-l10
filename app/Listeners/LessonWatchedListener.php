@@ -3,18 +3,19 @@
 namespace App\Listeners;
 
 use App\Enums\AchievementType;
-use App\Events\AchievementUnlocked;
-use App\Events\BadgeUnlocked;
 use App\Events\LessonWatched;
-use App\Models\Achievement;
-use App\Models\Badge;
+use App\Services\AchievementService;
+use App\Services\BadgeService;
 
 class LessonWatchedListener
 {
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(
+        public BadgeService $badgeService,
+        public AchievementService $achievementService
+    )
     {
         //
     }
@@ -26,24 +27,8 @@ class LessonWatchedListener
     {
         $user = $event->user;
 
-        $lessonsWatchedCount = $user->watched()->count();
+        $this->achievementService->unlockAchievement($user, AchievementType::LessonsWatched);
 
-        $achievement = Achievement::where('type', AchievementType::LessonsWatched)->firstWhere('unlock_count', $lessonsWatchedCount);
-
-        if(empty($achievement)) {
-            return;
-        }
-
-        $user->achievements()->attach($achievement->id, ['unlocked_at' => now()]);
-
-        AchievementUnlocked::dispatch($achievement->name, $user);
-
-        $badge = Badge::firstWhere('unlock_count', $user->achievements()->count());
-
-        if (empty($badge)){
-            return;
-        }
-
-        BadgeUnlocked::dispatch($badge->name, $user);
+        $this->badgeService->handleBadge($user);
     }
 }

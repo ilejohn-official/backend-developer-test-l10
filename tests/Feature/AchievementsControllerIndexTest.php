@@ -44,13 +44,13 @@ class AchievementsControllerIndexTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_correct_json_values()
+    public function it_returns_correct_json_values(): void
     {
         Event::fake();
         
         $comment = Comment::factory()->create();
 
-        (new CommentWrittenListener)->handle(
+        resolve(CommentWrittenListener::class)->handle(
             new CommentWritten($comment)
         );
 
@@ -59,7 +59,7 @@ class AchievementsControllerIndexTest extends TestCase
 
         $user->lessons()->attach($lesson->id, ['watched' => true]);
 
-        (new LessonWatchedListener)->handle(
+        resolve(LessonWatchedListener::class)->handle(
             new LessonWatched($lesson, $user)
         );
 
