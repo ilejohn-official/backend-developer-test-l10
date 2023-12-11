@@ -4,8 +4,8 @@ namespace App\Listeners;
 
 use App\Enums\AchievementType;
 use App\Events\AchievementUnlocked;
-use App\Events\LessonWatched;
 use App\Events\BadgeUnlocked;
+use App\Events\LessonWatched;
 use App\Models\Achievement;
 use App\Models\Badge;
 

@@ -11,26 +11,28 @@ use Illuminate\Http\JsonResponse;
 class AchievementsController extends Controller
 {
     public function index(User $user): JsonResponse
-    {
+    { 
         $achievements = $user->achievements;
-
         $nextAvailableAchievements = [];
+        $achievementTypes = AchievementType::values();
+        
+        foreach($achievementTypes as $achievementType){
+            $achievementTypeEnum = AchievementType::tryFrom($achievementType);
 
-        foreach(AchievementType::values() as $achievementType){
-            $latest = $achievements->where('type', $achievementType)->sortByDesc('order_position')->first();
+            $latest = $achievements->where('type', $achievementTypeEnum)->sortByDesc('order_position')->first();
 
             if (empty($latest)){
-                $nextAvailableAchievements[] = Achievement::where('type', $achievementType)->where('order_position', 1)->value('name');
+                $nextAvailableAchievements[] = Achievement::where('type', $achievementTypeEnum)->where('order_position', 1)->value('name');
                 continue;
             }
 
-            $next = Achievement::where('type', $achievementType)->where('order_position', $latest->order_position + 1)->value('name');
+            $next = Achievement::where('type', $achievementTypeEnum)->where('order_position', $latest->order_position + 1)->value('name');
 
             if (filled($next)){
                 $nextAvailableAchievements[] = $next;
             } 
         }
-
+        
         $numberOfAchievements = $achievements->count();
 
         $badgeUnlockCount = match (true) {

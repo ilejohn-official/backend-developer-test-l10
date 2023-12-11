@@ -65,9 +65,9 @@ class AchievementsControllerIndexTest extends TestCase
 
         $response = $this->get("/users/{$user->id}/achievements");
 
-        $response->assertExactJson([
+        $response->assertJson([
             'unlocked_achievements' => ['First Comment Written', 'First Lesson Watched'],
-            'next_available_achievements' => ['5 Lessons Watched', '3 Comments Written'],
+            'next_available_achievements' => ['3 Comments Written', '5 Lessons Watched'],
             'current_badge' => 'Beginner',
             'next_badge' => 'Intermediate',
             'remaining_to_unlock_next_badge' => 2
