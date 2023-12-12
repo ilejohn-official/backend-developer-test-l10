@@ -24,7 +24,7 @@ class AchievementSeeder extends Seeder
         }
     }
 
-    private function data()
+    private function data(): array
     {
         $lessonsWatchedAchievements = [
             [

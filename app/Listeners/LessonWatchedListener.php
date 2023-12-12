@@ -14,8 +14,8 @@ class LessonWatchedListener
      */
     public function __construct
     (
-        public BadgeService $badgeService,
-        public AchievementService $achievementService
+        public AchievementService $achievementService,
+        public BadgeService $badgeService
     )
     { }
 

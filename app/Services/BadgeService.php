@@ -10,7 +10,7 @@ class BadgeService
 {
     /**
      * 
-     * handle badge unlock
+     * handle earning badge
      */
     public function handleEarnBadge(User $user): void
     {
