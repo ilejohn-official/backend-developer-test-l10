@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\AchievementType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,4 +32,12 @@ class Achievement extends Model
     protected $casts = [
         'type' => AchievementType::class,
     ];
+
+    /**
+     * Scope a query to only include achievements of a given type.
+     */
+    public function scopeOfType(Builder $query, AchievementType $type): void
+    {
+        $query->where('type', $type);
+    }
 }

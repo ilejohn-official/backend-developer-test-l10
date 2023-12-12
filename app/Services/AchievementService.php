@@ -21,7 +21,7 @@ class AchievementService
             default => 0
         };
 
-        $achievement = Achievement::where('type', $achievementType)->firstWhere('unlock_count', $count);
+        $achievement = Achievement::ofType($achievementType)->firstWhere('unlock_count', $count);
 
         if(empty($achievement)) {
             return;

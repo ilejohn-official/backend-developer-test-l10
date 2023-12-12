@@ -21,11 +21,11 @@ class AchievementsController extends Controller
             $latest = $achievements->where('type', $achievementType)->sortByDesc('order_position')->first();
 
             if (empty($latest)){
-                $nextAvailableAchievements[] = Achievement::where('type', $achievementType)->where('order_position', 1)->value('name');
+                $nextAvailableAchievements[] = Achievement::ofType($achievementType)->where('order_position', 1)->value('name');
                 continue;
             }
 
-            $next = Achievement::where('type', $achievementType)->where('order_position', $latest->order_position + 1)->value('name');
+            $next = Achievement::ofType($achievementType)->where('order_position', $latest->order_position + 1)->value('name');
 
             if (filled($next)){
                 $nextAvailableAchievements[] = $next;
