@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('badges', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->integer('order_position');
+            $table->integer('order_position')->unique();
             $table->integer('unlock_count');
             $table->timestamps();
         });
