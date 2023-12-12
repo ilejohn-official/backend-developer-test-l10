@@ -31,19 +31,10 @@ class AchievementsController extends Controller
                 $nextAvailableAchievements[] = $next;
             } 
         }
-        
-        $numberOfAchievements = $achievements->count();
 
-        $badgeUnlockCount = match (true) {
-            $numberOfAchievements >= 10 => 10,
-            $numberOfAchievements >= 8 => 8,
-            $numberOfAchievements >= 4 => 4,
-            default => 0,
-        };
-
-        $currentBadge = Badge::firstWhere('unlock_count', $badgeUnlockCount);
+        $currentBadge = $user->currentBadge();
         $nextBadge = Badge::firstWhere('order_position', $currentBadge->order_position + 1);
-        $remainingToUnlockNextBadge = filled($nextBadge) ? $nextBadge->unlock_count - $numberOfAchievements : 0;
+        $remainingToUnlockNextBadge = filled($nextBadge) ? $nextBadge->unlock_count - $achievements->count() : 0;
 
         return response()->json([
             'unlocked_achievements' => $achievements->pluck('name'),

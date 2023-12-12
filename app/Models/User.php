@@ -73,4 +73,20 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Achievement::class, 'achievement_user');
     }
+
+    /**
+     * The badges the user has earned.
+     */
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class, 'badge_user')->withTimestamps();
+    }
+
+    /**
+     * The user's current badge.
+     */
+    public function currentBadge()
+    {
+        return $this->badges()->latest('badge_user.created_at')->first() ?? Badge::first();
+    }
 }

@@ -20,6 +20,8 @@ class BadgeService
             return;
         }
 
+        $user->badges()->attach($badge->id);
+
         BadgeUnlocked::dispatch($badge->name, $user);
     }
 }
