@@ -12,13 +12,12 @@ class LessonWatchedListener
     /**
      * Create the event listener.
      */
-    public function __construct(
+    public function __construct
+    (
         public BadgeService $badgeService,
         public AchievementService $achievementService
     )
-    {
-        //
-    }
+    { }
 
     /**
      * Handle the event.

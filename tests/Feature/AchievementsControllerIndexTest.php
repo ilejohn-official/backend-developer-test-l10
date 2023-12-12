@@ -2,13 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Events\CommentWritten;
-use App\Events\LessonWatched;
-use App\Listeners\CommentWrittenListener;
-use App\Listeners\LessonWatchedListener;
+use App\Enums\AchievementType;
 use App\Models\Comment;
 use App\Models\Lesson;
 use App\Models\User;
+use App\Services\AchievementService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -47,21 +45,15 @@ class AchievementsControllerIndexTest extends TestCase
     public function it_returns_correct_json_values(): void
     {
         Event::fake();
+        $service = app(AchievementService::class);
         
         $comment = Comment::factory()->create();
-
-        resolve(CommentWrittenListener::class)->handle(
-            new CommentWritten($comment)
-        );
+        $user = $comment->user;
+        $service->unlockAchievement($user, AchievementType::CommentsWritten);
 
         $lesson = Lesson::first();
-        $user = $comment->user;
-
         $user->lessons()->attach($lesson->id, ['watched' => true]);
-
-        resolve(LessonWatchedListener::class)->handle(
-            new LessonWatched($lesson, $user)
-        );
+        $service->unlockAchievement($user, AchievementType::LessonsWatched);
 
         $response = $this->get("/users/{$user->id}/achievements");
 
