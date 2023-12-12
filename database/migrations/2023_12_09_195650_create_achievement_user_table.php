@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('achievement_user', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
             $table->foreignId('achievement_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->timestamp('unlocked_at');
+
+            $table->unique(['achievement_id', 'user_id']);
         });
     }
 

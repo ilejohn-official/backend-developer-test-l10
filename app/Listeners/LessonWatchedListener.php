@@ -26,6 +26,11 @@ class LessonWatchedListener
     {
         $user = $event->user;
 
+        // Prevent unlocking achievement if the lesson is previously watched
+        if ($user->watched()->where('lesson_id', $event->lesson->id)->exists()) {
+            return;
+        }
+
         $this->achievementService->unlockAchievement($user, AchievementType::LessonsWatched);
 
         $this->badgeService->handleEarnBadge($user);
