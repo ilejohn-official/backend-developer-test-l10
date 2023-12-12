@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AchievementType;
+use App\Events\CommentWritten;
+use App\Events\LessonWatched;
 use App\Models\Achievement;
 use App\Models\Badge;
+use App\Models\Comment;
+use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
@@ -42,5 +46,28 @@ class AchievementsController extends Controller
             'next_badge' => $nextBadge?->name,
             'remaining_to_unlock_next_badge' => $remainingToUnlockNextBadge
         ]);
+    }
+
+    public function writeComment(User $user): JsonResponse
+    {
+        $comment = Comment::factory()->create(['user_id' => $user->id]);
+
+        CommentWritten::dispatch($comment);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function watchLesson(User $user, Lesson $lesson): JsonResponse
+    {
+        if ($user->lessons()->where('lesson_id', $lesson->id)->exists()){
+
+            return response()->json(['success' => false, 'message' => 'lesson already watched']);
+        }
+
+        $user->lessons()->attach($lesson->id, ['watched' => true]);
+
+        LessonWatched::dispatch($lesson, $user);
+
+        return response()->json(['success' => true]);
     }
 }
