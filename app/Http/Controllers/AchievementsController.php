@@ -17,7 +17,6 @@ class AchievementsController extends Controller
         $achievementTypes = AchievementType::cases();
         
         foreach($achievementTypes as $achievementType){
-
             $latest = $achievements->where('type', $achievementType)->sortByDesc('order_position')->first();
 
             if (empty($latest)){
