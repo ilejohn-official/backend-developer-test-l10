@@ -17,6 +17,8 @@ class CreateLessonUserTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('lesson_id')->constrained();
             $table->boolean('watched')->default(false);
+
+            $table->unique(['user_id', 'lesson_id']);
         });
     }
 
