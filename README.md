@@ -55,9 +55,13 @@ This project unlocks achievements and badges based on user activity.
   php artisan serve
   ```
 
+- To set up tests
+
+  Copy .env into .env.testing and set `APP_ENV` as "testing". Update the database details using a test db seperate from the app db.
+
 - To run tests
 
-  Copy .env.example into .env.testing and set `APP_ENV` as "testing". Update the database details to match your local setup then run
+  After the above setup then run
 
   ```
   php artisan test --env=testing
