@@ -14,19 +14,18 @@ class AchievementsController extends Controller
     { 
         $achievements = $user->achievements;
         $nextAvailableAchievements = [];
-        $achievementTypes = AchievementType::values();
+        $achievementTypes = AchievementType::cases();
         
         foreach($achievementTypes as $achievementType){
-            $achievementTypeEnum = AchievementType::tryFrom($achievementType);
 
-            $latest = $achievements->where('type', $achievementTypeEnum)->sortByDesc('order_position')->first();
+            $latest = $achievements->where('type', $achievementType)->sortByDesc('order_position')->first();
 
             if (empty($latest)){
-                $nextAvailableAchievements[] = Achievement::where('type', $achievementTypeEnum)->where('order_position', 1)->value('name');
+                $nextAvailableAchievements[] = Achievement::where('type', $achievementType)->where('order_position', 1)->value('name');
                 continue;
             }
 
-            $next = Achievement::where('type', $achievementTypeEnum)->where('order_position', $latest->order_position + 1)->value('name');
+            $next = Achievement::where('type', $achievementType)->where('order_position', $latest->order_position + 1)->value('name');
 
             if (filled($next)){
                 $nextAvailableAchievements[] = $next;
