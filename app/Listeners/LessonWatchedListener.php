@@ -28,6 +28,6 @@ class LessonWatchedListener
 
         $this->achievementService->unlockAchievement($user, AchievementType::LessonsWatched);
 
-        $this->badgeService->handleBadge($user);
+        $this->badgeService->handleEarnBadge($user);
     }
 }

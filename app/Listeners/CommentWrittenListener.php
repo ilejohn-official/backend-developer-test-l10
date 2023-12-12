@@ -28,6 +28,6 @@ class CommentWrittenListener
 
         $this->achievementService->unlockAchievement($user, AchievementType::CommentsWritten);
 
-        $this->badgeService->handleBadge($user);
+        $this->badgeService->handleEarnBadge($user);
     }
 }

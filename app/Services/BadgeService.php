@@ -12,7 +12,7 @@ class BadgeService
      * 
      * handle badge unlock
      */
-    public function handleBadge(User $user): void
+    public function handleEarnBadge(User $user): void
     {
         $badge = Badge::firstWhere('unlock_count', $user->achievements()->count());
 
