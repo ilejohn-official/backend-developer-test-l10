@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AchievementType;
 use App\Models\Achievement;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class AchievementSeeder extends Seeder
 {
@@ -16,10 +16,6 @@ class AchievementSeeder extends Seeder
         $achievements = $this->data();
 
         foreach ($achievements as $achievement) {
-            $achievement = array_merge($achievement, [
-                'identifier' => Str::snake($achievement['name'])
-            ]);
-
             Achievement::create($achievement);
         }
     }
@@ -30,67 +26,67 @@ class AchievementSeeder extends Seeder
             [
                 'name' => 'First Lesson Watched',
                 'order_position' => 1,
-                'unlock_count' => 1,
-                'type' => 'lessons_watched'
+                'unlock_count' => 1
             ],
             [
                 'name' => '5 Lessons Watched',
                 'order_position' => 2,
-                'unlock_count' => 5,
-                'type' => 'lessons_watched'
+                'unlock_count' => 5
             ],
             [
                 'name' => '10 Lessons Watched',
                 'order_position' => 3,
-                'unlock_count' => 10,
-                'type' => 'lessons_watched'
+                'unlock_count' => 10
             ],
             [
                 'name' => '25 Lessons Watched',
                 'order_position' => 4,
-                'unlock_count' => 25,
-                'type' => 'lessons_watched'
+                'unlock_count' => 25
             ],
             [
                 'name' => '50 Lessons Watched',
                 'order_position' => 5,
-                'unlock_count' => 50,
-                'type' => 'lessons_watched'
+                'unlock_count' => 50
             ]
         ];
+
+        foreach ($lessonsWatchedAchievements as &$value) {
+            $value['type'] = AchievementType::LessonsWatched;
+        }
+        unset($value);
 
         $commentsWrittenAchievements = [
             [
                 'name' => 'First Comment Written',
                 'order_position' => 1,
-                'unlock_count' => 1,
-                'type' => 'comments_written'
+                'unlock_count' => 1
             ],
             [
                 'name' => '3 Comments Written',
                 'order_position' => 2,
-                'unlock_count' => 3,
-                'type' => 'comments_written'
+                'unlock_count' => 3
             ],
             [
                 'name' => '5 Comments Written',
                 'order_position' => 3,
-                'unlock_count' => 5,
-                'type' => 'comments_written'
+                'unlock_count' => 5
             ],
             [
                 'name' => '10 Comments Written',
                 'order_position' => 4,
-                'unlock_count' => 10,
-                'type' => 'comments_written'
+                'unlock_count' => 10
             ],
             [
                 'name' => '20 Comments Written',
                 'order_position' => 5,
-                'unlock_count' => 20,
-                'type' => 'comments_written'
+                'unlock_count' => 20
             ]
         ];
+
+        foreach ($commentsWrittenAchievements as &$value) {
+            $value['type'] = AchievementType::CommentsWritten;
+        }
+        unset($value);
 
         return array_merge($lessonsWatchedAchievements, $commentsWrittenAchievements);
     }
