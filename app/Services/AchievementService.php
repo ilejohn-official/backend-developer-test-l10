@@ -27,6 +27,11 @@ class AchievementService
             return;
         }
 
+        //Prevent duplicate achievements
+        if ($user->achievements()->where('achievement_id', $achievement->id)->exists()) {
+            return;
+        }
+
         $user->achievements()->attach($achievement->id, ['unlocked_at' => now()]);
 
         AchievementUnlocked::dispatch($achievement->name, $user);

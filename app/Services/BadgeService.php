@@ -20,6 +20,11 @@ class BadgeService
             return;
         }
 
+        //Prevent duplicate badges
+        if ($user->badges()->where('badge_id', $badge->id)->exists()) {
+            return;
+        }
+
         $user->badges()->attach($badge->id);
 
         BadgeUnlocked::dispatch($badge->name, $user);
